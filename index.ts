@@ -199,3 +199,25 @@ class BallPlacer {
         this.curr.startUpdating(cb)
     }
 }
+
+class Renderer {
+
+    bp : BallPlacer = new BallPlacer()
+    animator : Animator = new Animator()
+
+    render(context : CanvasRenderingContext2D) {
+        this.bp.draw(context)
+    }
+    
+    handleTap(cb : Function) {
+        this.bp.startUpdating(() => {
+            this.animator.start(() => {
+                cb()
+                this.bp.update(() => {
+                    this.animator.stop()
+                    cb()
+                })
+            })
+        })
+    }
+}
